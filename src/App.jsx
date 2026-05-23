@@ -2,7 +2,6 @@ import Home from "./pages/Home"
 import NavBar from "./components/NavBar"
 import Favs from "./pages/Favs"
 import {Route, Routes} from 'react-router-dom'
-import './css/App.css'
 
 import { MovieProvider } from "./contexts/MovieContext"
 
