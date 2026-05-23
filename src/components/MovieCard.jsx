@@ -1,4 +1,3 @@
-
 import { useMovieContext } from '../contexts/MovieContext';
 
 function MovieCard({movie}) {
