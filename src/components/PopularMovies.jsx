@@ -23,13 +23,13 @@ function PopularMovies() {
     <div>
       <h1 className="text-4xl font-bold mb-6 mt-10 pl-4">Popular Movies</h1>
       <div
-        className="grid grid-rows-[repeat(auto-fill,minmax(250px,1fr))] gap-6 p-4 width-full box-border"
+        className="flex flex-col gap-6 p-4 width-full box-border"
       >
         <div
         className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-6 p-4 width-full box-border"
         >
           {popularMovies.slice(0, slice).map((movie) => (
-            <MovieCard movie={movie} key={movie.id} />
+            <MovieCard movie={movie}  key={movie.id} />
           ))}
         </div>
         <div className="flex justify-center gap-2 mt-4 mb-10">

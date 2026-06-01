@@ -1,6 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { getMovieDetails } from "../services/api";
 import { useParams } from "react-router-dom";
+import Tickets from "./Tickets";
+import { TicketContext } from "../contexts/TicketContext";
+import TicketSection from "./Tickets";
 
 function MovieDetails() {
   const { id } = useParams();
@@ -12,6 +15,8 @@ function MovieDetails() {
   const time_mins = movie?.runtime % 60 || 0;
   const time_hours = Math.floor((movie?.runtime || 0) / 60);
   const time_str = `${time_hours > 0 ? `${time_hours}h ` : ""}${time_mins}m`;
+
+  const theatreMovies = useContext(TicketContext) || [];
 
   useEffect(() => {
     const loadMovie = async () => {
@@ -34,16 +39,15 @@ function MovieDetails() {
   if (loading) {
     return <div className="p-4">Loading movie details...</div>;
   }
-
-  if (error) {
-    return <div className="p-4 text-red-500">{error}</div>;
-  }
-
   if (!movie) {
     return <div className="p-4">No movie data found.</div>;
   }
 
-  console.log(movie);
+
+    const isInTheatre = theatreMovies.includes(movie.id);
+    
+
+
   return (
     <div className="p-4">
       <h1 className="text-4xl font-bold mb-6 mt-10 justify-self-center">
@@ -74,7 +78,7 @@ function MovieDetails() {
             {movie.production_companies?.[0]?.name}
           </div>
           <div className="text-xl text-gray-300  flex items-center gap-8 flex-row">
-            <p className="font-bold text-white">Released:</p>{" "}
+            <p className="font-bold text-white">Release Date:</p>{" "}
             {movie.release_date}
           </div>
           <div className="text-xl text-gray-300 flex items-center gap-8 flex-row">
@@ -91,6 +95,10 @@ function MovieDetails() {
           </div>
         </div>
       </div>
+
+          {/* showtime, ticket buying deadline */}
+          {isInTheatre && <TicketSection movie={movie} />}
+
     </div>
   );
 }

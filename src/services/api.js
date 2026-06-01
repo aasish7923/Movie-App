@@ -3,6 +3,7 @@
 const API_KEY = import.meta.env.VITE_API_KEY;
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
+
 export const getPopularMovies = async (page = 1) => {
     const response = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&page=${page}`);
     const data = await response.json();
@@ -40,3 +41,9 @@ export const searchMovies = async (query) => {
 };
 
 // &query=${encodeURIComponent(query)}`); removes anything from query that we cant pass
+
+
+export const getTheatreMovies = async (ticketContextValue) => {
+            const movies = await Promise.all(ticketContextValue.map(id => getMovieDetails(id)));
+            return movies
+        }

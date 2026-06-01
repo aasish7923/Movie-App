@@ -1,9 +1,12 @@
 import MovieCard from "../components/MovieCard";
 import { useState, useEffect } from "react";
 import { getPopularMovies, getTrendingMovies,
-  getTopRatedMovies, getNowPlayingMovies} from "../services/api";
+         getTopRatedMovies, getNowPlayingMovies} from "../services/api";
 import ShowHomeIntro from "../components/ShowHomeIntro";
 import { useNavigate } from "react-router-dom";
+import { getTheatreMovies } from "../services/api";
+import { useContext } from "react";
+import { TicketContext } from "../contexts/TicketContext";
 
 function Home() {
   const slice = 6;
@@ -15,6 +18,9 @@ function Home() {
   const [topRatedMovies, setTopRatedMovies] = useState([]); 
   const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
   const [trendingMovies, setTrendingMovies] = useState([]);
+  const [theatreMovies, setTheatreMovies] = useState([]);
+
+  const ticketContextValue = useContext(TicketContext) || [];
 
   useEffect(() => {
     const loadPopularMovies = async () => {
@@ -53,11 +59,21 @@ function Home() {
         setError("Failed to load movies..");
       }
     };
+    const loadTheatreMovies = async () => {
+      try {
+        const theatreMovies = await getTheatreMovies(ticketContextValue);
+        setTheatreMovies(theatreMovies);
+      } catch (err) {
+        console.log(err);
+        setError("Failed to load movies..");
+      }
+    };
 
     loadPopularMovies();
     loadTopRatedMovies();
     loadNowPlayingMovies();
-    loadTrendingMovies(); 
+    loadTrendingMovies();
+    loadTheatreMovies();
   }, []);
 
   const handleSearch = async (e) => {
@@ -95,7 +111,12 @@ function Home() {
           </button>
       </form>
 
-      <ShowHomeIntro slice={slice} popularMovies={popularMovies} topRatedMovies={topRatedMovies} nowPlayingMovies={nowPlayingMovies} trendingMovies={trendingMovies} /> 
+      <ShowHomeIntro slice={slice}
+            popularMovies={popularMovies}
+            topRatedMovies={topRatedMovies}
+            nowPlayingMovies={nowPlayingMovies}
+            trendingMovies={trendingMovies}
+            theatreMovies={theatreMovies}/> 
     </div>
   );
 }
